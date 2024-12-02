@@ -16,7 +16,7 @@ model_urls = {
 
 class AlexNet(nn.Module):
 
-    def __init__(self, num_classes=1000):
+    def __init__(self, num_classes=1000, pretrained=False):
         super(AlexNet, self).__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
@@ -44,7 +44,7 @@ class AlexNet(nn.Module):
         )
         
         if pretrained: 
-          
+          # Load state dict from githun URL.
           state_dict = load_state_dict_from_url(model_urls['alexnet'])
 
           if num_classes != 1000:
@@ -54,7 +54,7 @@ class AlexNet(nn.Module):
                 
                 # Load the modified state dict
                 self.load_state_dict(state_dict, strict=False)
-            else:
+          else:
                 # If keeping 1000 classes, load the full state dict
                 self.load_state_dict(state_dict)
     
