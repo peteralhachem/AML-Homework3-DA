@@ -42,6 +42,22 @@ class AlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
+        
+        if pretrained: 
+          
+          state_dict = load_state_dict_from_url(model_urls['alexnet'])
+
+          if num_classes != 1000:
+                # Remove the last layer from the pretrained state dict
+                del state_dict['classifier.6.weight']
+                del state_dict['classifier.6.bias']
+                
+                # Load the modified state dict
+                self.load_state_dict(state_dict, strict=False)
+            else:
+                # If keeping 1000 classes, load the full state dict
+                self.load_state_dict(state_dict)
+    
 
     def forward(self, x):
         features = self.features(x)
